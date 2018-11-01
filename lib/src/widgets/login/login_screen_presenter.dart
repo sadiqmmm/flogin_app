@@ -12,8 +12,8 @@ class LoginScreenPresenter {
   RestDatasource api = new RestDatasource();
   LoginScreenPresenter(this._view);
 
-  doLogin(String email, String password, String deviceToken) {
-    api.login(email, password, deviceToken).then((Auth auth) {
+  doLogin(String email, String password) {
+    api.login(email, password).then((Auth auth) {
       print("API login");
       var db = new DatabaseHelper();
       db.saveAuth(auth).then((_) {

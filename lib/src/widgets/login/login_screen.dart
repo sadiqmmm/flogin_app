@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:login_app/src/auth.dart';
 import 'package:login_app/src/widgets/login/login_screen_presenter.dart';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
 
@@ -18,8 +16,7 @@ class LoginScreenState extends State<LoginScreen>
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   String _email, _password;
 
-  LoginScreenPresenter _presenter;
-  final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  LoginScreenPresenter _presenter;  
 
   LoginScreenState() {
     _presenter = new LoginScreenPresenter(this);
@@ -28,14 +25,7 @@ class LoginScreenState extends State<LoginScreen>
   }
   @override
   void initState() {
-    super.initState();
-    _firebaseMessaging.configure();
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+    super.initState();    
   }
 
   @override
@@ -51,13 +41,10 @@ class LoginScreenState extends State<LoginScreen>
     if (form.validate()) {
       setState(() => _isLoading = true);
       form.save();
-      _firebaseMessaging.getToken().then((String token) {
-        assert(token != null);
-        print(token);
+    
         setState(() {
-          _presenter.doLogin(_email, _password, token);
-        });
-      });
+          _presenter.doLogin(_email, _password);
+        });      
     }
   }
 
